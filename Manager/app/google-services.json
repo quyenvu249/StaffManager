@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "258584430716",
+    "firebase_url": "https://staff-manager-8e972.firebaseio.com",
+    "project_id": "staff-manager-8e972",
+    "storage_bucket": "staff-manager-8e972.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:258584430716:android:9a830821445d7fb17ae1f9",
+        "android_client_info": {
+          "package_name": "com.example.manager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "258584430716-gvp4mcdff0s3ok952klvrcr4lpf83ag1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.manager",
+            "certificate_hash": "f2ff4177496cdc150245aac5437ca3f535fdfb93"
+          }
+        },
+        {
+          "client_id": "258584430716-belucnikm4impqm8gq3mlolvdr46ejdo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDpdW9K1hu4Snb14_o6KO5PKddOdkjLSJ4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "258584430716-belucnikm4impqm8gq3mlolvdr46ejdo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
