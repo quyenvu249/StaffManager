@@ -39,6 +39,7 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     DatabaseReference mData;
     String userID;
+    String[] strings;
 
     @Override
 
@@ -67,6 +68,7 @@ public class LoginActivity extends AppCompatActivity {
         edUsername.setText(sharedPreferences.getString("username", ""));
         edPassword.setText(sharedPreferences.getString("password", ""));
         mAuth = FirebaseAuth.getInstance();
+        mData = FirebaseDatabase.getInstance().getReference().child("Staff");
     }
 
     private void init() {
@@ -98,25 +100,15 @@ public class LoginActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 final FirebaseUser user = mAuth.getCurrentUser();
-                                Toast.makeText(LoginActivity.this, "Đăng nhập thành công",
+                                strings = edUsername.getText().toString().split("@");
+                                userID = strings[0];
+                                Toast.makeText(LoginActivity.this, "Đăng nhập thành công" + userID,
                                         Toast.LENGTH_SHORT).show();
                                 new Handler().postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
-                                        mData = FirebaseDatabase.getInstance().getReference("Staff");
-                                        userID = mData.push().getKey();
-                                        Staff staff = new Staff();
-                                        staff.setStaffID(userID);
-                                        staff.setEmail(edUsername.getText().toString());
-                                        staff.setPassword(edPassword.getText().toString());
-                                        mData.child(userID).setValue(staff, new DatabaseReference.CompletionListener() {
-                                            @Override
-                                            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-                                                Log.d("LOG", "Successfully");
-                                            }
-                                        });
                                         Intent intent = new Intent(LoginActivity.this, StaffActivity.class);
-                                        intent.putExtra("name", getIntent().getStringExtra("name"));
+                                        intent.putExtra("staffID", userID);
                                         intent.putExtra("username", edUsername.getText().toString());
                                         intent.putExtra("password", edPassword.getText().toString());
                                         startActivity(intent);
@@ -132,8 +124,9 @@ public class LoginActivity extends AppCompatActivity {
                                     editor.commit();
                                 }
                             } else {
-                                Toast.makeText(LoginActivity.this, "Đăng nhập thất bại, kiểm tra lại email và password",
+                                Toast.makeText(LoginActivity.this, "Đăng nhập thất bại, kiểm tra lại email và password" + task.getException(),
                                         Toast.LENGTH_SHORT).show();
+                                Log.d("TAG", task.getException().toString());
                             }
 
                         }

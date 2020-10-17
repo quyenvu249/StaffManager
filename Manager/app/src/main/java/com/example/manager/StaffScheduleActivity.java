@@ -3,32 +3,44 @@ package com.example.manager;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.manager.model.Schedule;
 import com.example.manager.model.Staff;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class StaffScheduleActivity extends AppCompatActivity {
     ImageView icNext;
     EditText edTimeStart, edTimeEnd;
-    TextView tvTime, tvTime2, tvTime3, tvTime4, tvTime5, tvTime6, tvTime7;
+    TextView tvTime;
+    CheckBox cbShift1, cbShift2;
     Button btnOK, btnRegister, btnC1, btnC2;
     SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
     Calendar calendar1, calendar2;
@@ -37,6 +49,10 @@ public class StaffScheduleActivity extends AppCompatActivity {
     LinearLayout layoutTime;
     Spinner spinner;
     String[] time = {"1 tuần", "2 tuần"};
+    ArrayList<Schedule> schedules;
+    ScheduleAdapter adapter;
+    ListView lvShift;
+    Schedule schedule;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +62,10 @@ public class StaffScheduleActivity extends AppCompatActivity {
         calendar1 = Calendar.getInstance();
         calendar2 = Calendar.getInstance();
 
-        staffID = getIntent().getStringExtra("id");
+        staffID = getIntent().getStringExtra("staffID");
         brRoot = FirebaseDatabase.getInstance().getReference("Staff");
+        schedule = new Schedule();
+
 
         ArrayAdapter aa = new ArrayAdapter(this, android.R.layout.simple_spinner_item, time);
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -59,12 +77,6 @@ public class StaffScheduleActivity extends AppCompatActivity {
                 datePicker1();
             }
         });
-//        edTimeEnd.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                datePicker2();
-//            }
-//        });
         btnOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,33 +91,70 @@ public class StaffScheduleActivity extends AppCompatActivity {
                 tvTime.setText(sdf.format(calendar1.getTime()));
             }
         });
+        schedules = new ArrayList<>();
+        adapter = new ScheduleAdapter(StaffScheduleActivity.this, schedules, R.layout.item_schedule);
+        lvShift.setAdapter(adapter);
+        LoadData();
 
-        btnC1.setOnClickListener(new View.OnClickListener() {
+        btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Staff staff = new Staff();
-                staff.setShift1(true);
-                brRoot.child(staffID).child("shedule").child(tvTime.getText().toString()).child("Ca sáng").setValue(staff, new DatabaseReference.CompletionListener() {
+                if (cbShift1.isChecked() && !cbShift2.isChecked()) {
+                    schedule = new Schedule(tvTime.getText().toString(), true, false);
+                } else if (cbShift2.isChecked() && !cbShift1.isChecked()) {
+                    schedule = new Schedule(tvTime.getText().toString(), false, true);
+                } else if (cbShift1.isChecked() && cbShift2.isChecked()) {
+                    schedule = new Schedule(tvTime.getText().toString(), true, true);
+                } else {
+                    schedule = new Schedule(tvTime.getText().toString(), false, false);
+                }
+                brRoot.child(staffID).child("shedule").child(tvTime.getText().toString()).setValue(schedule, new DatabaseReference.CompletionListener() {
                     @Override
-                    public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                    public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
                         Toast.makeText(StaffScheduleActivity.this, "Lưu dữ liệu thành công", Toast.LENGTH_LONG).show();
                     }
                 });
             }
         });
-        btnC2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Staff staff = new Staff();
-                staff.setShift2(true);
-                brRoot.child(staffID).child("shedule").child(tvTime.getText().toString()).child("Ca tối").setValue(staff, new DatabaseReference.CompletionListener() {
-                    @Override
-                    public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-                        Toast.makeText(StaffScheduleActivity.this, "Lưu dữ liệu thành công", Toast.LENGTH_LONG).show();
-                    }
-                });
-            }
-        });
+
+//        btnC1.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Schedule schedule = new Schedule();
+//                schedule.date = tvTime.getText().toString();
+//                schedule.setShift1("Ca sáng");
+//                brRoot.child(staffID).child("shedule").setValue(schedule, new DatabaseReference.CompletionListener() {
+//                    @Override
+//                    public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+//                        Toast.makeText(StaffScheduleActivity.this, "Lưu dữ liệu thành công", Toast.LENGTH_LONG).show();
+//                        schedules.add(schedule);
+//                        adapter = new ScheduleAdapter(StaffScheduleActivity.this, schedules, R.layout.item_schedule);
+//                        lvShift.setAdapter(adapter);
+//                        adapter = new ScheduleAdapter(StaffScheduleActivity.this, schedules, R.layout.item_schedule);
+//                        lvShift.setAdapter(adapter);
+//                        LoadData();
+//                    }
+//                });
+//            }
+//        });
+//        btnC2.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Schedule schedule = new Schedule();
+//                schedule.date = tvTime.getText().toString();
+//                schedule.setShift1("Ca sáng");
+//                brRoot.child(staffID).child("shedule").setValue(schedule, new DatabaseReference.CompletionListener() {
+//                    @Override
+//                    public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+//                        Toast.makeText(StaffScheduleActivity.this, "Lưu dữ liệu thành công", Toast.LENGTH_LONG).show();
+//                        schedule.date = tvTime.getText().toString();
+//                        schedule.setShift2("Ca tối");
+//                        schedules.add(schedule);
+//                    }
+//                });
+//            }
+//        });
+
     }
 
 
@@ -114,16 +163,10 @@ public class StaffScheduleActivity extends AppCompatActivity {
         layoutTime = findViewById(R.id.layoutTime);
         edTimeStart = findViewById(R.id.edTimeStart);
         icNext = findViewById(R.id.icNext);
-//        edTimeEnd = findViewById(R.id.edTimeEnd);
+        lvShift = findViewById(R.id.lvShift);
         tvTime = findViewById(R.id.tvTime);
-        btnC1 = findViewById(R.id.btnC1);
-        btnC2 = findViewById(R.id.btnC2);
-//        tvTime2 = findViewById(R.id.tvTime2);
-//        tvTime3 = findViewById(R.id.tvTime3);
-//        tvTime4 = findViewById(R.id.tvTime4);
-//        tvTime5 = findViewById(R.id.tvTime5);
-//        tvTime6 = findViewById(R.id.tvTime6);
-//        tvTime7 = findViewById(R.id.tvTime7);
+        cbShift1 = findViewById(R.id.cbShift1);
+        cbShift2 = findViewById(R.id.cbShift2);
         btnOK = findViewById(R.id.btnOK);
         btnRegister = findViewById(R.id.btnRegister);
     }
@@ -156,4 +199,38 @@ public class StaffScheduleActivity extends AppCompatActivity {
         datePickerDialog.show();
     }
 
+    private void LoadData() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET) == PackageManager.PERMISSION_GRANTED) {
+            brRoot.child(staffID).child("shedule").child(tvTime.getText().toString()).addChildEventListener(new ChildEventListener() {
+                @Override
+                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                    Schedule schedule = dataSnapshot.getValue(Schedule.class);
+                    schedules.add(new Schedule(schedule.date,schedule.dayShift, schedule.nightShift));
+                    adapter.notifyDataSetChanged();
+                }
+
+                @Override
+                public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                    adapter.notifyDataSetChanged();
+                }
+
+                @Override
+                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                }
+
+                @Override
+                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.INTERNET}, 10);
+        }
+
+    }
 }

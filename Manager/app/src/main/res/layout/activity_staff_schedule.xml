@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_weight="5"
+    android:orientation="vertical"
     tools:context=".StaffScheduleActivity">
 
     <androidx.appcompat.widget.Toolbar
@@ -16,264 +18,164 @@
         app:layout_constraintTop_toTopOf="parent"
         app:theme="@style/ThemeOverlay.AppCompat.ActionBar"></androidx.appcompat.widget.Toolbar>
 
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tùy chọn thời gian"
+            android:textSize="18dp" />
+
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="8dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/edTimeStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:hint="Từ ngày"
+            android:textSize="18dp" />
+
+        <Button
+            android:id="@+id/btnOK"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Chọn" />
+
+        <ImageView
+            android:id="@+id/icNext"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_baseline_navigate_next_24" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        android:visibility="invisible"
+        android:weightSum="7">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Tùy chọn thời gian"
+                android:text="Thời gian"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/tvTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
                 android:textSize="18dp" />
 
-            <Spinner
-                android:id="@+id/spinner"
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ca 1"
+                android:textSize="20dp" />
+
+            <CheckBox
+                android:id="@+id/cbShift1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <EditText
-                android:id="@+id/edTimeStart"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:hint="Từ ngày"
-                android:textSize="18dp" />
-
-            <!--            <EditText-->
-            <!--                android:id="@+id/edTimeEnd"-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_weight="2"-->
-            <!--                android:hint="Đến"-->
-            <!--                android:textSize="18dp" />-->
-
-            <Button
-                android:id="@+id/btnOK"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Chọn" />
-
-            <ImageView
-                android:id="@+id/icNext"
-                android:layout_width="50dp"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_baseline_navigate_next_24" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/layoutTime"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:orientation="horizontal"
-            android:visibility="invisible"
-            android:weightSum="7">
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-            <LinearLayout
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="5"
-                android:orientation="vertical">
+                android:text="Ca 2"
+                android:textSize="20dp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Thời gian"
-                    android:textSize="20dp" />
-
-                <TextView
-                    android:id="@+id/tvTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:textSize="18dp" />
-
-                <!--                <TextView-->
-                <!--                    android:id="@+id/tvTime2"-->
-                <!--                    android:layout_width="wrap_content"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:layout_marginTop="8dp"-->
-                <!--                    android:textSize="18dp" />-->
-
-                <!--                <TextView-->
-                <!--                    android:id="@+id/tvTime3"-->
-                <!--                    android:layout_width="wrap_content"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:layout_marginTop="8dp"-->
-                <!--                    android:textSize="18dp" />-->
-
-                <!--                <TextView-->
-                <!--                    android:id="@+id/tvTime4"-->
-                <!--                    android:layout_width="wrap_content"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:layout_marginTop="8dp"-->
-                <!--                    android:textSize="18dp" />-->
-
-                <!--                <TextView-->
-                <!--                    android:id="@+id/tvTime5"-->
-                <!--                    android:layout_width="wrap_content"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:layout_marginTop="8dp"-->
-                <!--                    android:textSize="18dp" />-->
-
-                <!--                <TextView-->
-                <!--                    android:id="@+id/tvTime6"-->
-                <!--                    android:layout_width="wrap_content"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:layout_marginTop="8dp"-->
-                <!--                    android:textSize="18dp" />-->
-
-                <!--                <TextView-->
-                <!--                    android:id="@+id/tvTime7"-->
-                <!--                    android:layout_width="wrap_content"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:layout_marginTop="8dp"-->
-                <!--                    android:textSize="18dp" />-->
-            </LinearLayout>
-
-            <LinearLayout
+            <CheckBox
+                android:id="@+id/cbShift2"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                android:layout_height="wrap_content" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Ca 1"
-                    android:textSize="20dp" />
-
-                <Button
-                    android:id="@+id/btnC1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Đăng kí" />
-
-                <!--                <Button-->
-                <!--                    android:id="@+id/btnS2"-->
-                <!--                    android:layout_width="wrap_content"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:text="Đăng kí" />-->
-
-                <!--                <Button-->
-                <!--                    android:id="@+id/btnS3"-->
-                <!--                    android:layout_width="wrap_content"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:text="Đăng kí" />-->
-
-                <!--                <Button-->
-                <!--                    android:id="@+id/btnS4"-->
-                <!--                    android:layout_width="wrap_content"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:text="Đăng kí" />-->
-
-                <!--                <Button-->
-                <!--                    android:id="@+id/btnS5"-->
-                <!--                    android:layout_width="wrap_content"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:text="Đăng kí" />-->
-
-
-                <!--                <Button-->
-                <!--                    android:id="@+id/btnS6"-->
-                <!--                    android:layout_width="wrap_content"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:text="Đăng kí" />-->
-
-                <!--                <Button-->
-                <!--                    android:id="@+id/btnS7"-->
-                <!--                    android:layout_width="wrap_content"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:text="Đăng kí" />-->
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Ca 2"
-                    android:textSize="20dp" />
-
-                <Button
-                    android:id="@+id/btnC2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Đăng kí" />
-
-                <!--                <Button-->
-                <!--                    android:id="@+id/btT2"-->
-                <!--                    android:layout_width="wrap_content"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:text="Đăng kí" />-->
-
-                <!--                <Button-->
-                <!--                    android:id="@+id/btnT3"-->
-                <!--                    android:layout_width="wrap_content"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:text="Đăng kí" />-->
-
-                <!--                <Button-->
-                <!--                    android:id="@+id/btnT4"-->
-                <!--                    android:layout_width="wrap_content"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:text="Đăng kí" />-->
-
-                <!--                <Button-->
-                <!--                    android:id="@+id/btnT5"-->
-                <!--                    android:layout_width="wrap_content"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:text="Đăng kí" />-->
-
-
-                <!--                <Button-->
-                <!--                    android:id="@+id/btnT6"-->
-                <!--                    android:layout_width="wrap_content"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:text="Đăng kí" />-->
-
-                <!--                <Button-->
-                <!--                    android:id="@+id/btnT7"-->
-                <!--                    android:layout_width="wrap_content"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:text="Đăng kí" />-->
-
-            </LinearLayout>
         </LinearLayout>
+    </LinearLayout>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Lịch làm đã đăng kí"
+        android:textColor="#000000"
+        android:textSize="24dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:weightSum="3">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Ngày" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Ca sáng" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Ca tối" />
 
     </LinearLayout>
+
+    <ListView
+        android:id="@+id/lvShift"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <Button
         android:id="@+id/btnRegister"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout_marginBottom="16dp"
-        android:text="Kết thúc"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:text="Đăng kí" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

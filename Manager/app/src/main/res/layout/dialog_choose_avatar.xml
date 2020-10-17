@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:padding="16dp"
+    android:weightSum="2">
+
+    <ImageView
+        android:id="@+id/icCamera"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_weight="1"
+        android:src="@drawable/ic_baseline_camera_alt_24" />
+
+    <ImageView
+        android:id="@+id/icImage"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_weight="1"
+        android:src="@drawable/ic_baseline_image_24" />
+</LinearLayout>

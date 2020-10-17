@@ -33,21 +33,26 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edUsername"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
+                />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Your password">
+            android:hint="Your password"
+            app:endIconMode="password_toggle">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edPassword"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:inputType="textPassword" />
 
         </com.google.android.material.textfield.TextInputLayout>
+
 
         <CheckBox
             android:id="@+id/cbSave"
@@ -74,7 +79,6 @@
                 android:layout_height="wrap_content"
                 android:text="Sign up" />
         </LinearLayout>
-
 
     </LinearLayout>
 

@@ -4,23 +4,24 @@ public class Staff {
     String staffID;
     String email;
     String password;
+    String avatarLink;
     String staffName;
     String phone;
     String birthday;
-    boolean shift1, shift2;
+    String schedule;
 
     public Staff() {
     }
 
-    public Staff(String staffID, String email, String password, String staffName, String phone, String birthday, boolean shift1, boolean shift2) {
+    public Staff(String staffID, String email, String password, String avatarLink, String staffName, String phone, String birthday, String schedule) {
         this.staffID = staffID;
         this.email = email;
         this.password = password;
+        this.avatarLink = avatarLink;
         this.staffName = staffName;
         this.phone = phone;
         this.birthday = birthday;
-        this.shift1 = shift1;
-        this.shift2 = shift2;
+        this.schedule = schedule;
     }
 
     public String getStaffName() {
@@ -48,20 +49,12 @@ public class Staff {
     }
 
 
-    public boolean isShift1() {
-        return shift1;
+    public String getSchedule() {
+        return schedule;
     }
 
-    public void setShift1(boolean shift1) {
-        this.shift1 = shift1;
-    }
-
-    public boolean isShift2() {
-        return shift2;
-    }
-
-    public void setShift2(boolean shift2) {
-        this.shift2 = shift2;
+    public void setSchedule(String schedule) {
+        this.schedule = schedule;
     }
 
     public String getPhone() {
@@ -86,5 +79,13 @@ public class Staff {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getAvatarLink() {
+        return avatarLink;
+    }
+
+    public void setAvatarLink(String avatarLink) {
+        this.avatarLink = avatarLink;
     }
 }

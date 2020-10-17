@@ -25,72 +25,106 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:padding="16dp"
-            android:weightSum="2">
+            android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/icCamera"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_weight="1"
-                android:src="@drawable/ic_baseline_camera_alt_24" />
+                android:id="@+id/imgAvatar"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center"
+                android:src="@drawable/usericon" />
 
-            <ImageView
-                android:id="@+id/icImage"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_weight="1"
-                android:src="@drawable/ic_baseline_image_24" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:id="@+id/tvUsername"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp" />
+
+                <Button
+                    android:id="@+id/btnChangeAvt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Đổi avatar" />
+            </LinearLayout>
+
         </LinearLayout>
-
-        <ImageView
-            android:id="@+id/imgAvatar"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_gravity="center" />
-
-        <EditText
-            android:id="@+id/edName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Nhập họ tên" />
-
-        <EditText
-            android:id="@+id/edPhone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="SDT" />
-
-        <EditText
-            android:id="@+id/edBirthday"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Ngày sinh" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="32dp"
-            android:weightSum="2">
+            android:padding="8dp"
+            android:weightSum="5">
 
-            <Button
-                android:id="@+id/btnUpdateInfo"
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
                 android:layout_weight="1"
-                android:text="Cập nhật" />
+                android:text="Họ tên"
+                android:textSize="20dp" />
 
-            <Button
-                android:id="@+id/btnRegister"
+            <EditText
+                android:id="@+id/edName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:text="Lịch làm" />
+                android:layout_weight="4"
+                android:hint="Nhập họ tên" />
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:weightSum="5">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="SDT"
+                android:textSize="20dp" />
+
+            <EditText
+                android:id="@+id/edPhone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:hint="Nhập SDT" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:weightSum="5">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Ngày sinh"
+                android:textSize="20dp" />
+
+            <EditText
+                android:id="@+id/edBirthday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:hint="Ngày sinh" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnUpdateInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:text="Cập nhật" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

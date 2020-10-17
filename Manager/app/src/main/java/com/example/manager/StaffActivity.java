@@ -9,30 +9,34 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 public class StaffActivity extends AppCompatActivity {
-    String name;
+    String staffID;
     LinearLayout registerSchedule, settings, staffAccount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_staff);
-        name = getIntent().getStringExtra("username");
+        staffID = getIntent().getStringExtra("staffID");
 
-        setTitle("Xin chào! ");
+        setTitle("Xin chào " + staffID);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        //registerSchedule = findViewById(R.id.registerSchedule);
+        registerSchedule = findViewById(R.id.registerSchedule);
         staffAccount = findViewById(R.id.staffAccount);
-//        registerSchedule.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startActivity(new Intent(StaffActivity.this, StaffScheduleActivity.class));
-//            }
-//        });
+        registerSchedule.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(StaffActivity.this, StaffScheduleActivity.class);
+                intent.putExtra("staffID", getIntent().getStringExtra("staffID"));
+                startActivity(intent);
+            }
+        });
         staffAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(StaffActivity.this, StaffAccountActivity.class));
+                Intent intent = new Intent(StaffActivity.this, StaffAccountActivity.class);
+                intent.putExtra("staffID", getIntent().getStringExtra("staffID"));
+                startActivity(intent);
             }
         });
     }

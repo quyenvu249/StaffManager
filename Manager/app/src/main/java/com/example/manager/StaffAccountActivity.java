@@ -8,7 +8,9 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -17,7 +19,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -25,13 +32,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.manager.model.Staff;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -43,9 +53,10 @@ import java.util.Calendar;
 import java.util.Stack;
 
 public class StaffAccountActivity extends AppCompatActivity {
-    ImageView icCamera, icImage, imgAvatar;
+    ImageView imgAvatar;
     EditText edName, edPhone, edBirthday;
-    Button btnUpdateInfo, btnRegister;
+    TextView tvUsername;
+    Button btnUpdateInfo, btnChangeAvatar;
     int REQUEST_CODE_IMAGE = 100;
     int REQUEST_CODE_IMAGE_STORAGE = 200;
     FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -61,6 +72,7 @@ public class StaffAccountActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_staff_account);
+        setTitle("Tài khoản của tôi");
         init();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -80,17 +92,32 @@ public class StaffAccountActivity extends AppCompatActivity {
         mData = FirebaseDatabase.getInstance().getReference("Staff");
 
         storageRef = storage.getReferenceFromUrl("gs://staff-manager-8e972.appspot.com");
+        keyID = getIntent().getStringExtra("staffID");
 
-        icCamera.setOnClickListener(new View.OnClickListener() {
+        tvUsername.setText(getIntent().getStringExtra("staffID"));
+        LoadData();
+        btnChangeAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                capturePicture();
-            }
-        });
-        icImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                choosePicture();
+                final AlertDialog.Builder builder = new AlertDialog.Builder(StaffAccountActivity.this);
+                View view = LayoutInflater.from(StaffAccountActivity.this).inflate(R.layout.dialog_choose_avatar, null);
+                builder.setTitle("Chọn ảnh");
+                ImageView icCamera = view.findViewById(R.id.icCamera);
+                ImageView icImage = view.findViewById(R.id.icImage);
+                icCamera.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        capturePicture();
+                    }
+                });
+                icImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        choosePicture();
+                    }
+                });
+                builder.setView(view);
+                builder.show();
             }
         });
         edBirthday.setOnClickListener(new View.OnClickListener() {
@@ -103,14 +130,6 @@ public class StaffAccountActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 updateInfo();
-            }
-        });
-        btnRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(StaffAccountActivity.this, StaffScheduleActivity.class);
-                intent.putExtra("id", keyID);
-                startActivity(intent);
             }
         });
     }
@@ -141,48 +160,34 @@ public class StaffAccountActivity extends AppCompatActivity {
                         downloadUrl.addOnSuccessListener(new OnSuccessListener<Uri>() {
                             @Override
                             public void onSuccess(final Uri uri) {
-                                keyID = mData.push().getKey();
                                 final Staff staff = new Staff();
-                                staff.setStaffID(keyID);
                                 staff.setStaffName(edName.getText().toString());
+                                staff.setPhone(edPhone.getText().toString());
+                                staff.setAvatarLink(uri.toString());
                                 staff.setBirthday(sdf.format(calendar1.getTime()));
-                                final String linkAnh = uri.toString();
-                                mData.child(keyID).setValue(staff, new DatabaseReference.CompletionListener() {
-                                    @Override
-                                    public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-                                        Log.d("key", keyID);
-                                        if (databaseError == null) {
-                                            Toast.makeText(StaffAccountActivity.this, "Lưu dữ liệu thành công", Toast.LENGTH_LONG).show();
-                                            edName.setText(staff.getStaffName());
-                                            edBirthday.setText(staff.getBirthday());
-                                            edPhone.setText(staff.getPhone());
-                                            imgAvatar.setImageURI(uri);
-                                        } else {
-                                            Toast.makeText(StaffAccountActivity.this, "Lỗi!!!" + databaseError, Toast.LENGTH_LONG).show();
-                                        }
-                                    }
-                                });
-
+//                                final String linkAnh = uri.toString();
+                                mData.child(keyID).child("name").setValue(edName.getText().toString());
+                                mData.child(keyID).child("phone").setValue(edPhone.getText().toString());
+                                mData.child(keyID).child("avatarLink").setValue(uri.toString());
+                                mData.child(keyID).child("birthday").setValue(sdf.format(calendar1.getTime()));
                             }
                         });
-
                     }
+
                 }
-
-
             }
         });
     }
 
+
     private void init() {
-        icCamera = findViewById(R.id.icCamera);
-        icImage = findViewById(R.id.icImage);
         imgAvatar = findViewById(R.id.imgAvatar);
         edName = findViewById(R.id.edName);
         edPhone = findViewById(R.id.edPhone);
         edBirthday = findViewById(R.id.edBirthday);
         btnUpdateInfo = findViewById(R.id.btnUpdateInfo);
-        btnRegister = findViewById(R.id.btnRegister);
+        tvUsername = findViewById(R.id.tvUsername);
+        btnChangeAvatar = findViewById(R.id.btnChangeAvt);
     }
 
     private void choosePicture() {
@@ -234,4 +239,44 @@ public class StaffAccountActivity extends AppCompatActivity {
         datePickerDialog.show();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.menu_register_schedule) {
+            Intent intent = new Intent(StaffAccountActivity.this, StaffScheduleActivity.class);
+            intent.putExtra("id", keyID);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void LoadData() {
+        DatabaseReference brRoot = FirebaseDatabase.getInstance().getReference("Staff").child(keyID);
+        brRoot.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot areaSnapshot : dataSnapshot.getChildren()) {
+                    String name = areaSnapshot.child("name").getValue(String.class);
+                    String birthday = areaSnapshot.child("birthday").getValue(String.class);
+                    final String[] nameList = {name};
+                    edName.setText(name);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+//        Glide.with(StaffAccountActivity.this).load(mData.child(keyID).child("avatarLink").toString())
+//                .skipMemoryCache(false)
+//                .into(imgAvatar);
+//        edName.setText(mData.child(keyID).child("name").toString());
+//        edBirthday.setText(mData.child(keyID).child("birthday") + "");
+        edPhone.setText(mData.child(keyID).child("name").getKey());
+//        Toast.makeText(getApplicationContext(), mData.child(keyID).child("avatarLink").toString() + "acd", Toast.LENGTH_SHORT).show();
+    }
 }
